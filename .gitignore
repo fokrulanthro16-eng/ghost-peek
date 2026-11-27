@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+.vscode/
+.cursor/
+.agent/
+.antigravity/
+.vercel/
+*.log
