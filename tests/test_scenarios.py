@@ -43,13 +43,13 @@ class ScenarioTests(unittest.TestCase):
         for event in self.events:
             self.assertGreaterEqual(event["spawnTimeMs"], 0)
             self.assertLess(event["spawnTimeMs"], 30_000)
-            self.assertGreaterEqual(event["proGhostMs"], 450)
-            self.assertLessEqual(event["proGhostMs"], 780)
+            self.assertGreaterEqual(event["proGhostMs"], 850)
+            self.assertLessEqual(event["proGhostMs"], 1_220)
 
             if event["kind"] == "target":
-                self.assertEqual(event["windowMs"], 1_650)
+                self.assertEqual(event["windowMs"], 1_850)
             else:
-                self.assertEqual(event["windowMs"], 1_050)
+                self.assertEqual(event["windowMs"], 1_100)
 
             if previous_spawn is not None:
                 self.assertGreaterEqual(event["spawnTimeMs"] - previous_spawn, 1_450)
@@ -67,7 +67,7 @@ class ScenarioTests(unittest.TestCase):
             self.assertTrue(all(event["roundName"] == name for event in events))
             self.assertEqual(sum(event["kind"] == "target" for event in events), target_count)
             self.assertEqual(sum(event["kind"] == "decoy" for event in events), decoy_count)
-            self.assertTrue(all(450 <= event["proGhostMs"] <= 780 for event in events))
+            self.assertTrue(all(850 <= event["proGhostMs"] <= 1_220 for event in events))
 
     def test_distance_scales_ghost_timings(self):
         prev = (0.5, 0.5)
@@ -77,7 +77,7 @@ class ScenarioTests(unittest.TestCase):
             dist = math.dist(prev, (event["xNorm"], event["yNorm"]))
             if dist <= 0.30:
                 nearby.append(event["proGhostMs"])
-            elif dist >= 0.55:
+            elif dist >= 0.50:
                 far.append(event["proGhostMs"])
             prev = (event["xNorm"], event["yNorm"])
         self.assertTrue(nearby)
@@ -86,10 +86,10 @@ class ScenarioTests(unittest.TestCase):
 
     def test_coordinates_are_valid_and_non_overlapping(self):
         for event in self.events:
-            self.assertGreaterEqual(event["xNorm"], 0.14)
-            self.assertLessEqual(event["xNorm"], 0.86)
-            self.assertGreaterEqual(event["yNorm"], 0.20)
-            self.assertLessEqual(event["yNorm"], 0.82)
+            self.assertGreaterEqual(event["xNorm"], 0.20)
+            self.assertLessEqual(event["xNorm"], 0.80)
+            self.assertGreaterEqual(event["yNorm"], 0.24)
+            self.assertLessEqual(event["yNorm"], 0.78)
 
         for index, first in enumerate(self.events):
             for second in self.events[index + 1 :]:

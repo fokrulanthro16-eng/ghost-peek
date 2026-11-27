@@ -15,8 +15,8 @@ import type {
   ShotResult,
 } from "./game/types";
 
-const LEADERBOARD_KEY = "ghostpeek_lb_v2";
-const FAN_GHOST_KEY = "ghostpeek_fan_v2";
+const LEADERBOARD_KEY = "ghostpeek_lb_v3";
+const FAN_GHOST_KEY = "ghostpeek_fan_v3";
 
 const scenarios = scenariosJson as ScenarioEvent[];
 const targetEvents = scenarios.filter((event) => event.kind === "target");
@@ -386,9 +386,9 @@ function getActiveFanGhost(): LeaderboardEntry | null {
 
 function seedLeaderboard(): LeaderboardEntry[] {
   const entries = [
-    seedEntry("NOVA", 3650, 515, 9, -102),
-    seedEntry("KAI", 3200, 548, 8, -69),
-    seedEntry("RIFT", 2850, 592, 7, -25),
+    seedEntry("NOVA", 3850, 935, 9, -100),
+    seedEntry("KAI", 3300, 990, 8, -45),
+    seedEntry("RIFT", 2850, 1065, 7, 30),
   ];
   return entries.sort(compareLeaderboardEntries);
 }

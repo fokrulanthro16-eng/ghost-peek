@@ -390,7 +390,7 @@ export class GhostPeekScene extends Phaser.Scene {
   private spawnEvent(event: ScenarioEvent, sceneTime: number): void {
     const x = event.xNorm * this.scale.width;
     const y = event.yNorm * this.scale.height;
-    const radius = event.kind === "target" ? 48 : 54;
+    const radius = event.kind === "target" ? 54 : 54;
     const container = this.add.container(x, y).setDepth(20);
     const targetBase = this.add.graphics();
     container.add(targetBase);

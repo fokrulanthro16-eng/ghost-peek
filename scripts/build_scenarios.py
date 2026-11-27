@@ -15,10 +15,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT_PATH = ROOT / "src" / "data" / "scenarios.json"
-MIN_GHOST_MS = 490
-MAX_GHOST_MS = 740
-TARGET_WINDOW_MS = 1_650
-DECOY_WINDOW_MS = 1_050
+MIN_GHOST_MS = 880
+MAX_GHOST_MS = 1_180
+TARGET_WINDOW_MS = 1_850
+DECOY_WINDOW_MS = 1_100
 
 
 ROUND_DEFS = [
@@ -29,7 +29,7 @@ ROUND_DEFS = [
         "end": 10_000,
         "targets": 5,
         "decoys": 1,
-        "paceOffset": 36,
+        "paceOffset": 45,
     },
     {
         "round": 2,
@@ -38,7 +38,7 @@ ROUND_DEFS = [
         "end": 20_000,
         "targets": 4,
         "decoys": 2,
-        "paceOffset": 14,
+        "paceOffset": 15,
     },
     {
         "round": 3,
@@ -47,7 +47,7 @@ ROUND_DEFS = [
         "end": 30_000,
         "targets": 3,
         "decoys": 1,
-        "paceOffset": -10,
+        "paceOffset": -15,
     },
 ]
 
@@ -60,21 +60,21 @@ SPAWN_TEMPLATES = {
 
 
 COORD_TEMPLATES = [
-    (0.18, 0.26),
-    (0.49, 0.22),
-    (0.78, 0.31),
-    (0.27, 0.53),
+    (0.20, 0.25),
+    (0.49, 0.24),
+    (0.75, 0.39),
+    (0.28, 0.51),
     (0.63, 0.49),
-    (0.84, 0.67),
+    (0.80, 0.62),
     (0.38, 0.74),
-    (0.16, 0.79),
-    (0.57, 0.78),
-    (0.86, 0.20),
+    (0.22, 0.78),
+    (0.57, 0.77),
+    (0.80, 0.25),
     (0.31, 0.34),
-    (0.69, 0.62),
+    (0.63, 0.64),
     (0.46, 0.43),
-    (0.14, 0.62),
-    (0.82, 0.80),
+    (0.20, 0.62),
+    (0.79, 0.78),
     (0.60, 0.35),
 ]
 
@@ -179,15 +179,15 @@ def extract_grid_timings(path):
 
 
 def next_ghost_ms(rng, timing_pool, distance, pace_offset, index):
-    # Scale reaction baseline smoothly from ~490-550ms for nearby peeks
-    # to ~620-740ms for cross-screen flicks, modulated by round pace.
-    dist_factor = clamp((distance - 0.20) / 0.50, 0.0, 1.0)
-    base_ms = 492 + dist_factor * 212 + pace_offset
+    # Scale reaction baseline from ~880-960ms for nearby peeks
+    # to ~1060-1180ms for cross-screen flicks, modulated by round pace.
+    dist_factor = clamp((distance - 0.18) / 0.46, 0.0, 1.0)
+    base_ms = 895 + dist_factor * 245 + pace_offset
     if timing_pool:
         source = timing_pool[index % len(timing_pool)]
         blended = int(round(base_ms * 0.7 + source * 0.3))
         return int(clamp(blended, MIN_GHOST_MS, MAX_GHOST_MS))
-    jitter = rng.randint(-12, 12)
+    jitter = rng.randint(-14, 14)
     return int(clamp(round(base_ms + jitter), MIN_GHOST_MS, MAX_GHOST_MS))
 
 
@@ -249,9 +249,9 @@ def validate(events):
         if previous_spawn is not None and event["spawnTimeMs"] - previous_spawn < 1_450:
             raise ValueError(f"{event['id']} spawns too close to the previous event")
         previous_spawn = event["spawnTimeMs"]
-        if not 0.14 <= event["xNorm"] <= 0.86:
+        if not 0.20 <= event["xNorm"] <= 0.80:
             raise ValueError(f"{event['id']} xNorm is out of bounds")
-        if not 0.20 <= event["yNorm"] <= 0.82:
+        if not 0.24 <= event["yNorm"] <= 0.78:
             raise ValueError(f"{event['id']} yNorm is out of bounds")
         if not MIN_GHOST_MS <= event["proGhostMs"] <= MAX_GHOST_MS:
             raise ValueError(f"{event['id']} ghost timing is out of bounds")
