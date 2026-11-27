@@ -1,5 +1,7 @@
 # GhostPeek
 
+Live demo: https://ghost-peek-taupe.vercel.app
+
 [AI showcase notes](AI_SHOWCASE.md)
 
 GhostPeek is a 30-second booth reaction mini game for the Cloud9 x JetBrains Hackathon, Category 3: Event Mini Game. It runs fully in the browser with Phaser 3, TypeScript, localStorage, and procedural Web Audio.
